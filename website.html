@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lakeside School Student Government - Bill S.R.42</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .breadcrumb {
+      padding: 15px 0;
+      color: #0056b3;
+      font-size: 14px;
+    }
+
+    .breadcrumb a {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .page-header {
+      margin-bottom: 20px;
+    }
+
+    .bill-title {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .congress-info {
+      color: #666;
+      margin-bottom: 30px;
+    }
+
+    .content-box {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .content-header {
+      background: #8B2332;
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .hide-button {
+      background: transparent;
+      border: none;
+      color: white;
+      cursor: pointer;
+    }
+
+    .bill-content {
+      padding: 20px;
+    }
+
+    .info-row {
+      display: flex;
+      border-bottom: 1px solid #eee;
+      padding: 10px 0;
+    }
+
+    .info-label {
+      font-weight: bold;
+      width: 150px;
+      padding-right: 20px;
+    }
+
+    .info-value {
+      flex: 1;
+    }
+
+    .bill-link {
+      color: #0056b3;
+      text-decoration: none;
+    }
+
+    .bill-link:hover {
+      text-decoration: underline;
+    }
+
+    .tracker-container {
+      display: flex;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .tracker-label {
+      font-weight: bold;
+      margin-right: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .info-icon {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #1a8754;
+      color: white;
+      text-align: center;
+      line-height: 20px;
+      font-weight: bold;
+      margin-left: 5px;
+    }
+
+    .tracker {
+      display: flex;
+      position: relative;
+      height: 40px;
+      flex-grow: 1;
+    }
+
+    .tracker-arrow {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      padding: 0 15px;
+      background-color: #e9e9e9;
+      color: #333;
+      margin-right: -20px;
+      flex: 1;
+      min-width: 120px;
+      z-index: 1;
+      border: 1px solid #ccc;
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%, 20px 50%);
+      padding-right: 30px;
+    }
+
+    .tracker-arrow:first-child {
+      clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 50%, calc(100% - 20px) 100%, 0 100%);
+      z-index: 5;
+    }
+
+    .tracker-arrow:last-child {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 20px 50%);
+      margin-right: 0;
+      z-index: 1;
+    }
+
+    .tracker-arrow.active {
+      background-color: #4d4d4d;
+      color: white;
+      z-index: 10;
+    }
+
+    .right-sidebar {
+      background: #f5f5f5;
+      padding: 20px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar-title {
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 15px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+
+    .tab-container {
+      margin-top: 40px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .tab {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      margin-right: 5px;
+      cursor: pointer;
+      position: relative;
+      top: 1px;
+    }
+
+    .tab.active {
+      background: white;
+      border-bottom: 1px solid white;
+    }
+
+    .tab-count {
+      font-size: 12px;
+      color: #666;
+      margin-left: 5px;
+    }
+
+    .tab-contents {
+      background: white;
+      border: 1px solid #ddd;
+      border-top: none;
+      padding: 20px;
+      margin-bottom: 40px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-panel {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+      opacity: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .actions-button {
+      background-color: #f0f0f0;
+      border: 1px solid #ddd;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .top-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .top-action-button {
+      padding: 8px 15px;
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      margin-left: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+
+    .top-action-button i {
+      margin-right: 5px;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #8B2332;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 10px 15px;
+      cursor: pointer;
+    }
+
+    .columns {
+      display: flex;
+      gap: 30px;
+    }
+
+    .main-column {
+      flex: 2;
+    }
+
+    .sidebar-column {
+      flex: 1;
+    }
+
+    @media (max-width: 768px) {
+      .columns {
+        flex-direction: column;
+      }
+
+      .info-row {
+        flex-direction: column;
+      }
+
+      .info-label {
+        width: 100%;
+        margin-bottom: 5px;
+      }
+
+      .tracker {
+        overflow-x: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="#">Home</a> > <a href="#">Legislation</a> > <a href="#">2024-2025 School Year</a> > S.R.42
+    </div>
+
+    <div class="top-actions">
+      <button class="top-action-button"><i>📄</i> Citation</button>
+      <button class="top-action-button"><i>🔔</i> Subscribe</button>
+      <button class="top-action-button"><i>📤</i> Share/Save</button>
+      <button class="top-action-button"><i>💬</i> Feedback</button>
+    </div>
+
+    <div class="page-header">
+      <h1 class="bill-title">S.R.42 - A resolution approving the allocation of student activity funds for the annual Spring Festival.</h1>
+      <div class="congress-info">Lakeside Student Government (2024-2025) |</div>
+    </div>
+
+    <div class="columns">
+      <div class="main-column">
+        <div class="content-box">
+          <div class="content-header">
+            STUDENT RESOLUTION
+            <button class="hide-button">Hide Overview ×</button>
+          </div>
+          <div class="bill-content">
+            <!-- Your bill content rows -->
+            <div class="info-row"><div class="info-label">Sponsor:</div><div class="info-value"><a href="#">Matthew Kim [9th]</a> (Introduced 03/15/2025)</div></div>
+            <div class="info-row"><div class="info-label">Committees:</div><div class="info-value">Student Government - May Day Games & Events Committee</div></div>
+            <div class="info-row"><div class="info-label">Latest Action:</div><div class="info-value">Student Council - 03/22/2025 Games Committee <a href="#">Proposal 84</a> Reported to President and Body</div></div>
+            <div class="info-row"><div class="info-label">Roll Call Votes:</div><div class="info-value">There has been <a href="#">1 roll call vote</a></div></div>
+            <div class="info-row"><div class="info-label">Tracker:</div><div class="info-value">
+              <div class="tracker-container">
+                <div class="tracker-label">Tracker: <span class="info-icon">i</span></div>
+                <div class="tracker">
+                  <div class="tracker-arrow">Introduced</div>
+                  <div class="tracker-arrow">To Committee</div>
+                  <div class="tracker-arrow">Passed Body</div>
+                  <div class="tracker-arrow active">To Treasurer</div>
+                  <div class="tracker-arrow">Became Policy</div>
+                </div>
+              </div>
+            </div></div>
+          </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tab-container">
+          <div class="tab active">Summary <span class="tab-count">(1)</span></div>
+          <div class="tab">Text <span class="tab-count">(3)</span></div>
+          <div class="tab">Actions <span class="tab-count">(12)</span></div>
+          <div class="tab">Titles <span class="tab-count">(1)</span></div>
+          <div class="tab">Amendments <span class="tab-count">(0)</span></div>
+          <div class="tab">Cosponsors <span class="tab-count">(16)</span></div>
+          <div class="tab">Committees <span class="tab-count">(1)</span></div>
+          <div class="tab">Related Bills <span class="tab-count">(3)</span></div>
+        </div>
+
+        <!-- Tab Content (appears right below tabs) -->
+        <div class="tab-contents">
+          <div class="tab-panel active"><p>This bill allocates funding for the annual Spring Festival...</p></div>
+          <div class="tab-panel"><p>Text of the resolution goes here...</p></div>
+          <div class="tab-panel"><p>Action history content...</p></div>
+          <div class="tab-panel"><p>Title details...</p></div>
+          <div class="tab-panel"><p>No amendments at this time.</p></div>
+          <div class="tab-panel"><p>List of cosponsors...</p></div>
+          <div class="tab-panel"><p>Committee information...</p></div>
+          <div class="tab-panel"><p>Related bills information...</p></div>
+        </div>
+      </div>
+
+      <div class="sidebar-column">
+        <div class="right-sidebar">
+          <div class="sidebar-title">More on This Bill</div>
+          <a href="#" class="bill-link">Student Budget Office Cost Estimates [0]</a>
+        </div>
+        <div class="right-sidebar">
+          <div class="sidebar-title">Subject — Policy Area:</div>
+          <div>Student Activities and School Events Funding</div>
+          <a href="#" class="bill-link">View subjects »</a>
+        </div>
+        <div class="right-sidebar">
+          <div class="sidebar-title">Related SRC Products:</div>
+          <a href="#" class="bill-link">SRC Reports on S.R.42</a>
+        </div>
+        <div class="right-sidebar">
+          <div class="sidebar-title">Give Feedback on This Bill</div>
+          <a href="#" class="bill-link">Contact Your Class Representative</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="back-to-top">↑ Back to top</button>
+
+  <script>
+    document.querySelector('.hide-button').addEventListener('click', function () {
+      const billContent = document.querySelector('.bill-content');
+      billContent.style.display = billContent.style.display === 'none' ? 'block' : 'none';
+      this.innerHTML = billContent.style.display === 'none' ? 'Show Overview +' : 'Hide Overview ×';
+    });
+
+    document.querySelector('.back-to-top').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    tabs.forEach((tab, index) => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        panels.forEach(p => p.classList.remove('active'));
+        panels[index]?.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>
